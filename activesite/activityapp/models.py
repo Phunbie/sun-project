@@ -3,11 +3,15 @@ from PIL import Image as Im
 from django.contrib.auth.models import User
 
 
+class Team(models.Model):
+    name = models.CharField(max_length=255)
+
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     role = models.CharField(max_length=100)
     region = models.CharField(max_length=100)
     area = models.CharField(max_length=100)
+    team = models.ForeignKey(Team, on_delete=models.SET_NULL, null = True)
     country = models.CharField(max_length=100)
 
 class Task(models.Model):
@@ -15,7 +19,8 @@ class Task(models.Model):
     description = models.CharField(max_length=255)
     region = models.CharField(max_length=100)
     area = models.CharField(max_length=100)
-    completed = models.CharField(max_length=100)
+    approve = models.BooleanField(default=False)
+    completed = models.BooleanField(default=False)
    
 
 class Visit(models.Model):
@@ -30,9 +35,6 @@ class Visit(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     
 
-
-class Team(models.Model):
-    name = models.CharField(max_length=255)
     
 
 class UserTeam(models.Model):

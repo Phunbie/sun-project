@@ -22,7 +22,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-gy4m-pv&s$7!h90*^gy_%l3hrtr8up#2^so3c=%k($&$-z9h7%'
-
+newKey = os.environ.get('pass1')
+facebo = os.environ.get('secFace')
+goog = os.environ.get('secgoo')
+#SECRET_KEY = newKey
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
@@ -46,7 +49,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
     'allauth.socialaccount.providers.facebook',
-    'allauth.socialaccount.providers.github',
+
 
     'crispy_forms',
 ]
