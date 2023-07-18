@@ -4,4 +4,6 @@ from . import views
 
 urlpatterns = [
     path("", views.index, name="index"),
+    path("dashboard", views.dashboard, name="dashboard"),
+    path('teams/<int:id>/profiles/', views.team_profiles, name='team_profiles'),
 ]
