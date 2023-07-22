@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import  Visit, Team,  UserTeam, Audit, Task, Profile
+from .models import  Visit, Team,  UserTeam, Task, Profile , Audit
 
 class visitAdmin(admin.ModelAdmin):
     list_display = ["user", "date","goal","achievement","notes","picture","created_at","updated_at"]

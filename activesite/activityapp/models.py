@@ -19,8 +19,12 @@ class Task(models.Model):
     description = models.CharField(max_length=255)
     region = models.CharField(max_length=100)
     area = models.CharField(max_length=100)
+    selected = models.BooleanField(default=False)
     approve = models.BooleanField(default=False)
     completed = models.BooleanField(default=False)
+    user_id = models.IntegerField(default=0)
+    team_id = models.IntegerField(default=0)
+    updated_at = models.DateTimeField(auto_now=True)
    
 
 class Visit(models.Model):
@@ -46,9 +50,8 @@ class UserTeam(models.Model):
    
 
 class Audit(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    team = models.ForeignKey(Team, on_delete=models.CASCADE)
     date = models.DateField()
     findings = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    
