@@ -14,15 +14,6 @@ from .forms import TaskForm
         return redirect('createprofile') """
 
 
-def index(request):
-    #task = Task.objects.all()
-    task = Task.objects.filter(approve=False, completed=False)
-    completed = Task.objects.filter(approve=False, completed=True)
-    approve = Task.objects.filter(approve=True, completed=True)
-    tas = {'task':task,'completed':completed,'approve':approve}
-    return render(request, "index.html", tas)
-    #return HttpResponse("Hello, world. You're at the polls index.")
-
 
 def dashboard(request):
     #task = Task.objects.all()
@@ -32,7 +23,7 @@ def dashboard(request):
     completed = Task.objects.filter(approve=False, completed=True)
     approve = Task.objects.filter(approve=True, completed=True)
     tas = {'task':task,'completed':completed,'approve':approve, 'selected':selected}
-    return render(request, "account/index.html", tas)
+    return render(request, "dashboard.html", tas)
 
 
 
