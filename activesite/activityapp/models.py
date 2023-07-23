@@ -5,6 +5,9 @@ from django.contrib.auth.models import User
 
 class Team(models.Model):
     name = models.CharField(max_length=255)
+    def __str__(self):
+        return self.name
+
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -13,6 +16,8 @@ class Profile(models.Model):
     area = models.CharField(max_length=100)
     team = models.ForeignKey(Team, on_delete=models.SET_NULL, null = True)
     country = models.CharField(max_length=100)
+    def __str__(self):
+        return self.user
 
 class Task(models.Model):
     task = models.CharField(max_length=100)
@@ -25,6 +30,9 @@ class Task(models.Model):
     user_id = models.IntegerField(default=0)
     team_id = models.IntegerField(default=0)
     updated_at = models.DateTimeField(auto_now=True)
+    def __str__(self):
+        return self.task
+
    
 
 class Visit(models.Model):

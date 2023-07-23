@@ -3,7 +3,8 @@ from django.contrib.auth.decorators import login_required
 from .models import Task, Profile, Team, Visit
 from django.shortcuts import redirect
 #from django.core.exceptions import ObjectDoesNotExist
-from .forms import TaskForm
+from .forms import TaskForm, ProfileForm 
+import datetime
 
 """def redirectToCreate():
     user = request.user
@@ -77,7 +78,7 @@ def createTask(request):
         )
         new_task.save()
         
-        return redirect('home')  
+        return redirect('dashboard')  
         
     return render(request, 'create_task.html')
 
@@ -99,13 +100,13 @@ def createTeam(request):
         )
         new_team.save()
         
-        return redirect('home')  
+        return redirect('dashboard')  
         
     return render(request, 'create_team.html')
 
 
 
-@login_required
+"""@login_required
 def createprofile(request):
     if request.method == 'POST':
         user = request.user
@@ -127,7 +128,20 @@ def createprofile(request):
         
         return redirect('home')  
         
-    return render(request, 'create_profile.html')
+    return render(request, 'create_profile.html')"""
+@login_required
+def createprofile(request):
+    if request.method == 'POST':
+        form = ProfileForm(request.POST)
+        if form.is_valid():
+            profile = form.save(commit=False)
+            profile.user = request.user
+            profile.team = form.cleaned_data['team']
+            profile.save()
+            return redirect('dashboard')
+    else:
+        form = ProfileForm(user=request.user)
+    return render(request, 'create_profile.html', {'form': form})
 
 
 
@@ -141,14 +155,16 @@ def team_profiles(request, id):
         message="you need to create a profile first"
         return redirect('createprofile') 
     team = get_object_or_404(Team, id=id)
+    team_name=team.name
     profiles = Profile.objects.filter(team=team)
-    return render(request, 'team_profiles.html', {'profiles': profiles})
+    return render(request, 'team_profiles.html', {'profiles': profiles,'team_name':team_name})
 
 
 
 @login_required
-def monthly_team_tasks(request, month, teamid):
+def monthly_team_tasks(request,teamid):
     user = request.user
+    month = datetime.date.today().month
     try:
         Profile.objects.get(user=user)
     except Profile.DoesNotExist:
@@ -174,20 +190,42 @@ def monthly_team_tasks(request, month, teamid):
 @login_required
 def select_task(request, pk):
     user = request.user
+    userid = user.id
+    profile = get_object_or_404(Profile, user=user)
+    teamid = profile.team.id
     try:
         Profile.objects.get(user=user)
     except Profile.DoesNotExist:
         message="you need to create a profile first"
         return redirect('createprofile') 
     task = get_object_or_404(Task, pk=pk)
-    
+    task_name = task.task
+    task.team_id= teamid
+    task.user_id= userid
     if request.method == 'POST':
+        task.team_id= teamid
+        task.user_id= userid
         form = TaskForm(request.POST, instance=task)
         if form.is_valid():
-            task.description = form.cleaned_data['description']    
-            task.save()
-            return redirect('task_list')
+            form.save()
+            return redirect('dashboard')
     else:
         form = TaskForm(instance=task)
-        
-    return render(request, 'select_task.html', {'form': form})
+    return render(request, 'select_task.html', {'form': form, 'task_name':task_name})
+
+
+@login_required
+def teams(request):
+    user = request.user
+    try:
+        Profile.objects.get(user=user)
+    except Profile.DoesNotExist:
+        message="you need to create a profile first"
+        return redirect('createprofile') 
+    teams = Team.objects.all()
+    return render(request, 'teams.html', {'teams': teams})
+
+
+@login_required
+def completetask(request):
+    pass

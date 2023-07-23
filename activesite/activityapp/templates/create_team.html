@@ -1,0 +1,12 @@
+{% extends 'account/base.html' %}
+
+{% block content %}
+  <h1>Create Team</h1>
+  <form method="post">
+    {% csrf_token %}
+    <label for="name">Name:</label>
+    <input type="text" name="name" id="name" required>
+    <br><br>
+    <input class="btn btn-primary" type="submit" value="Create Team">
+  </form>
+{% endblock %}
