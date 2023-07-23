@@ -1,10 +1,18 @@
 {% extends 'account/base.html' %}
 {% block content %}
+<h3 style="text-align: center;">Create New Task</h3>
 <form method="post">{% csrf_token %}
-    <input type="text" name="task">
-    <input type="text" name="description">  
-    <input type="text" name="region">
-    <input type="text" name="area"> 
-    <button type="submit">Create Task</button>
-  </form>
+  <div class="col-auto">
+    <label for="task" style="width:50%;text-align: center;">Task name</label>
+    <input class="form-control" type="text" name="task" style="width:50%;"><br>
+    <label for="description" style="width:50%;text-align: center;">Description</label>
+    <!--<input class="form-control" type="text" name="description" style="width:50%;"><br>-->
+    <textarea class="form-control" placeholder="Please describe the task" name="description" style="width:50%;"></textarea><br>
+    <label for="region" style="width:50%;text-align: center;">Region</label> 
+    <input class="form-control" type="text" name="region" style="width:50%;"><br>
+    <label for="area" style="width:50%;text-align: center;">Area</label> 
+    <input class="form-control" type="text" name="area" style="width:50%;"> <br>
+    <button style="margin-left:22%;" type="button" class="btn btn-primary">Create Task</button>
+  </div>
+</form>
 {% endblock %}

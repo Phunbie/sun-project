@@ -19,7 +19,8 @@ def dashboard(request):
     #task = Task.objects.all()
     user_id = request.user.id
     task = Task.objects.filter(approve=False, completed=False, selected=False)
-    selected = Task.objects.filter(approve=False, completed=False, selected=True, user_id=user_id)
+    #selected = Task.objects.filter(approve=False, completed=False, selected=True, user_id=user_id)
+    selected = Task.objects.filter(approve=False, completed=False, selected=True)
     completed = Task.objects.filter(approve=False, completed=True)
     approve = Task.objects.filter(approve=True, completed=True)
     tas = {'task':task,'completed':completed,'approve':approve, 'selected':selected}
@@ -47,7 +48,7 @@ def aproveTask(request, id):
             tasks.approve = False 
         tasks.save()
     
-        return redirect('home')  
+        return redirect('dashboard')  
    
     
     return render(request, 'approve.html', {'tasks': tasks,'visits':visits})
@@ -100,7 +101,7 @@ def createTeam(request):
         
         return redirect('home')  
         
-    return render(request, 'create_task.html')
+    return render(request, 'create_team.html')
 
 
 

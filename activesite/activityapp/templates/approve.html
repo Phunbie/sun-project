@@ -1,5 +1,10 @@
-<form method="post">{% csrf_token %}
+{% extends 'account/base.html' %}
+{% block content %}
+<h3>Approve task: {{ tasks.task }}</h3>
+
+<form class="pb-5" method="post">{% csrf_token %}
     <input type="radio" name="approve" value="true"> Approve
     <input type="radio" name="approve" value="false" checked> Reject  
-    <button type="submit">Save</button>
-  </form>
+    <button  type="button" class="btn btn-primary">Save</button> <!--type="submit"-->
+</form>
+  {% endblock %}
