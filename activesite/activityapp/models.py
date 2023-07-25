@@ -17,7 +17,7 @@ class Profile(models.Model):
     team = models.ForeignKey(Team, on_delete=models.SET_NULL, null = True)
     country = models.CharField(max_length=100)
     def __str__(self):
-        return self.user
+        return self.user.username
 
 class Task(models.Model):
     task = models.CharField(max_length=100)

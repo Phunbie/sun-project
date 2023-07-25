@@ -1,0 +1,12 @@
+{% extends 'account/base.html' %}
+
+{% block content %}
+  <h1>{{ visit.mission.task }}</h1>
+  {% for i in visit %}
+  <p>Date: {{ i.date }}</p>
+  <p>Goal: {{ i.goal }}</p>
+  <p>Achievement: {{ i.achievement }}</p>
+  <p>Notes: {{ i.notes }}</p>
+  <img src="{{ i.picture.url }}" alt="Visit picture" height="100px" width="100px">
+  {% endfor %}
+{% endblock %}

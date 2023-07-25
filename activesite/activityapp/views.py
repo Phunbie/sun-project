@@ -3,7 +3,8 @@ from django.contrib.auth.decorators import login_required
 from .models import Task, Profile, Team, Visit
 from django.shortcuts import redirect
 #from django.core.exceptions import ObjectDoesNotExist
-from .forms import TaskForm, ProfileForm 
+from django.forms import modelform_factory
+from .forms import TaskForm, ProfileForm, ImageUploadForm, ComleteTaskForm 
 import datetime
 
 """def redirectToCreate():
@@ -17,14 +18,20 @@ import datetime
 
 
 def dashboard(request):
-    #task = Task.objects.all()
+    role = ""
+    try:
+        profile=Profile.objects.get(user=request.user)
+        role = profile.role
+    #except ObjectDoesNotExist:
+    except Profile.DoesNotExist:
+        role = "" 
     user_id = request.user.id
     task = Task.objects.filter(approve=False, completed=False, selected=False)
-    #selected = Task.objects.filter(approve=False, completed=False, selected=True, user_id=user_id)
-    selected = Task.objects.filter(approve=False, completed=False, selected=True)
+    selected = Task.objects.filter(approve=False, completed=False, selected=True, user_id=user_id)
+    #selected = Task.objects.filter(approve=False, completed=False, selected=True)
     completed = Task.objects.filter(approve=False, completed=True)
     approve = Task.objects.filter(approve=True, completed=True)
-    tas = {'task':task,'completed':completed,'approve':approve, 'selected':selected}
+    tas = {'task':task,'completed':completed,'approve':approve, 'selected':selected, "role":role}
     return render(request, "dashboard.html", tas)
 
 
@@ -131,6 +138,7 @@ def createprofile(request):
     return render(request, 'create_profile.html')"""
 @login_required
 def createprofile(request):
+    message=""
     if request.method == 'POST':
         form = ProfileForm(request.POST)
         if form.is_valid():
@@ -139,9 +147,11 @@ def createprofile(request):
             profile.team = form.cleaned_data['team']
             profile.save()
             return redirect('dashboard')
+        else:
+            message='Guess you have already created a profile'
     else:
         form = ProfileForm(user=request.user)
-    return render(request, 'create_profile.html', {'form': form})
+    return render(request, 'create_profile.html', {'form': form,'message':message})
 
 
 
@@ -227,5 +237,101 @@ def teams(request):
 
 
 @login_required
-def completetask(request):
-    pass
+def completetask(request,id):
+    data = Visit.objects.all()
+    context = {
+        'data' : data
+    }
+    return render(request,"completetask.html", context)
+
+""""
+@login_required
+def uploadVisit(request):
+    if request.method == 'POST':
+        form = ImageUploadForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('index')
+    else:
+            form = ImageUploadForm()
+    return render(request, 'upload.html', {'form': form})
+
+
+@login_required
+def create_visit(request):
+    if request.method == 'POST':
+        form = ImageUploadForm(request.POST, request.FILES)
+        if form.is_valid():
+            visit = form.save(commit=False)
+            visit.user = request.user
+            visit.mission = Task.objects.filter(pk=request.POST.get('mission'))
+            visit.save()
+            return redirect('dashboard')
+            #return redirect('visit_detail', pk=visit.pk)
+    else:
+        form = ImageUploadForm()
+
+    form.fields['mission'].queryset = Task.objects.filter(user=request.user)
+
+    context = {
+        'form': form
+    }
+    return render(request, 'create_visit.html', context)
+"""
+
+
+@login_required
+def create_visit(request):
+    user = request.user
+    try:
+        Profile.objects.get(user=user)
+    except Profile.DoesNotExist:
+        message="you need to create a profile first"
+        return redirect('createprofile') 
+    VisitForm = modelform_factory(Visit, exclude=[])
+    if request.method == 'POST':
+        form = ImageUploadForm(request.POST, request.FILES)
+        if form.is_valid():
+            visit = form.save(commit=False)
+            taskid = visit.mission.id
+            visit.user = request.user
+            visit.save()
+            return redirect('completetask', pk=taskid)
+            #return redirect('visit_detail', visit.pk)
+    else:
+        form = ImageUploadForm()
+    return render(request, 'create_visit.html', {'form': form})
+
+@login_required
+def visit_detail(request, taskid):
+    task = Task.objects.get(id=taskid)
+    visit = Visit.objects.filter(mission=task)
+    return render(request, 'visit_detail.html', {'visit': visit})
+
+
+@login_required
+def complete_task(request, pk):
+    user = request.user
+    userid = user.id
+    profile = get_object_or_404(Profile, user=user)
+    teamid = profile.team.id
+    try:
+        Profile.objects.get(user=user)
+    except Profile.DoesNotExist:
+        message="you need to create a profile first"
+        return redirect('createprofile') 
+    task = get_object_or_404(Task, pk=pk)
+    visit = Visit.objects.filter(mission=task)
+    task_name = task.task
+    task.team_id= teamid
+    task.user_id= userid
+    if request.method == 'POST':
+        task.team_id= teamid
+        task.user_id= userid
+        form = ComleteTaskForm(request.POST, instance=task)
+        if form.is_valid():
+            form.save()
+            return redirect('dashboard')
+    else:
+        form = ComleteTaskForm(instance=task)
+    return render(request, 'complete_task.html', {'form': form, 'task_name':task_name, 'visit':visit})

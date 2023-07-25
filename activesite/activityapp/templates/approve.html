@@ -7,4 +7,14 @@
     <input type="radio" name="approve" value="false" checked> Reject  
     <button  type="button" class="btn btn-primary">Save</button> <!--type="submit"-->
 </form>
-  {% endblock %}
+
+{% for i in visit %}
+<p>Date: {{ i.date }}</p>
+<p>Goal: {{ i.goal }}</p>
+<p>Achievement: {{ i.achievement }}</p>
+<p>Notes: {{ i.notes }}</p>
+<img src="{{ i.picture.url }}" alt="Visit picture" height="100px" width="100px">
+{% endfor %}
+
+
+{% endblock %}

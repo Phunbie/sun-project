@@ -2,29 +2,31 @@
 {% block content %}
 
 <h1 class="text-center">Dashboard</h1>
-<div class="container text-center">
+<div class="container text-center" style="height:700px;">
     <div class="row "><h2>Available Task</h2></div> <!--align-items-center-->
-    <div class="row ">
+    <div class="row">
     {% for i in task %}
-    <div class="col-4">
-        {{ i.task }}
+    <div class="col-4" style="background-color: rgb(228, 241, 33); border-radius: 20%; color: cornsilk; margin: 2px 2px;">
+        <a href="{% url 'selecttask' i.id %}"> {{ i.task }} </a>
     </div>
     {% endfor %}
+    <!--{% if role == "Staff" %}-->
     <div><h2>Selected Task</h2></div>
     {% for i in selected %}
-    <div class="col-4">
-        {{ i.task }}
+    <div class="col-4" style="background-color: rgb(228, 241, 33); border-radius: 20%; color: cornsilk;  margin: 2px 2px;">
+        <a href="{% url 'completetask' i.id %}"></a>{{ i.task }}</a>
     </div>
     {% endfor %}
+    <!--{% endif %}-->
     <div><h2>Completed Task</h2></div>
     {% for i in completed %}
-    <div class="col-4">
+    <div class="col-4" style="background-color: rgb(228, 241, 33); border-radius: 20%; color: cornsilk;">
         {{ i.task }}
     </div>
     {% endfor %}
     <div><h2>Approved Task</h2></div>
     {% for i in approve %}
-    <div class="col-4">
+    <div class="col-4" style="background-color: rgb(228, 241, 33); border-radius: 20%; color: cornsilk;">
         {{ i.task }}
     </div>
     {% endfor %}

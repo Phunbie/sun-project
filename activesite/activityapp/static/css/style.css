@@ -261,7 +261,7 @@ button {
 }
 
 .sidenav a:hover {
-    color: #e7ff5d;
+    color: #f3ff50;
 }
 
 .sidenav .closebtn {
@@ -531,8 +531,8 @@ button {
     align-items: center;
 }
 
-.cart_bt{
-}
+/*.cart_bt{
+}*/
 .cart_bt a{
     width: 100%;
     float: left;

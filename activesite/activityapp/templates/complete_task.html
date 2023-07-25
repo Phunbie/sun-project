@@ -1,0 +1,22 @@
+{% extends 'account/base.html' %}
+
+{% block content %}
+  <h1>Complete Task {{ task_name }}</h1>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <br><br>
+    <input type="submit" value="Save">
+  </form>
+<a href="{% url 'createvisit' %}">add visit</a>
+
+  <h2>{{ visit.mission.task }}</h2>
+  {% for i in visit %}
+  <p>Date: {{ i.date }}</p>
+  <p>Goal: {{ i.goal }}</p>
+  <p>Achievement: {{ i.achievement }}</p>
+  <p>Notes: {{ i.notes }}</p>
+  <img src="{{ i.picture.url }}" alt="Visit picture" height="100px" width="100px">
+  {% endfor %}
+
+{% endblock %}
