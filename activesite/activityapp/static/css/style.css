@@ -264,6 +264,10 @@ button {
     color: #f3ff50;
 }
 
+.text-light:hover{
+    color: #f3ff50;
+}
+
 .sidenav .closebtn {
     position: absolute;
     top: 0;

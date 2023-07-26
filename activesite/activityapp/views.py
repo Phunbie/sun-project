@@ -16,7 +16,7 @@ import datetime
         return redirect('createprofile') """
 
 
-
+@login_required
 def dashboard(request):
     role = ""
     try:
@@ -193,7 +193,7 @@ def monthly_team_tasks(request,teamid):
     'month': month,
     'visits':visits
     }
-    return render(request, 'tasks.html', context)
+    return render(request, 'monthly_team_tasks.html', context)
 
 
 
@@ -244,40 +244,6 @@ def completetask(request,id):
     }
     return render(request,"completetask.html", context)
 
-""""
-@login_required
-def uploadVisit(request):
-    if request.method == 'POST':
-        form = ImageUploadForm(request.POST, request.FILES)
-        if form.is_valid():
-            form.save()
-            return redirect('index')
-    else:
-            form = ImageUploadForm()
-    return render(request, 'upload.html', {'form': form})
-
-
-@login_required
-def create_visit(request):
-    if request.method == 'POST':
-        form = ImageUploadForm(request.POST, request.FILES)
-        if form.is_valid():
-            visit = form.save(commit=False)
-            visit.user = request.user
-            visit.mission = Task.objects.filter(pk=request.POST.get('mission'))
-            visit.save()
-            return redirect('dashboard')
-            #return redirect('visit_detail', pk=visit.pk)
-    else:
-        form = ImageUploadForm()
-
-    form.fields['mission'].queryset = Task.objects.filter(user=request.user)
-
-    context = {
-        'form': form
-    }
-    return render(request, 'create_visit.html', context)
-"""
 
 
 @login_required
@@ -335,3 +301,19 @@ def complete_task(request, pk):
     else:
         form = ComleteTaskForm(instance=task)
     return render(request, 'complete_task.html', {'form': form, 'task_name':task_name, 'visit':visit})
+
+
+@login_required
+def TaskDetail(request, id):
+    user = request.user
+    try:
+        Profile.objects.get(user=user)
+    #except ObjectDoesNotExist:
+    except Profile.DoesNotExist:
+        message="you need to create a profile first"
+        return redirect('createprofile') 
+    #task = Task.objects.all()
+    task = get_object_or_404(Task, id=id)
+    visits_count = Visit.objects.filter(mission=task).count() 
+    
+    return render(request, 'TaskDetail.html', {'task': task,'visits_count':visits_count})

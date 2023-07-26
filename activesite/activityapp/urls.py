@@ -17,4 +17,5 @@ urlpatterns = [
     path('createvisit', views.create_visit, name='createvisit'),
     path('visitdetail/<int:taskid>/', views.visit_detail, name='visitdetail'),
     path('completetask/<int:pk>/', views.complete_task, name='completetask'),
+    path('taskdetail/<int:id>/', views.TaskDetail, name='taskdetail'),
 ]

@@ -10,24 +10,26 @@
         <a href="{% url 'selecttask' i.id %}"> {{ i.task }} </a>
     </div>
     {% endfor %}
-    <!--{% if role == "Staff" %}-->
+    {% if role == "Staff" %}
     <div><h2>Selected Task</h2></div>
     {% for i in selected %}
     <div class="col-4" style="background-color: rgb(228, 241, 33); border-radius: 20%; color: cornsilk;  margin: 2px 2px;">
-        <a href="{% url 'completetask' i.id %}"></a>{{ i.task }}</a>
+        <a href="{% url 'completetask' i.id %}">{{ i.task }}</a>
     </div>
     {% endfor %}
-    <!--{% endif %}-->
+    {% endif %}
+    {% if role == "Manager" %}
     <div><h2>Completed Task</h2></div>
     {% for i in completed %}
     <div class="col-4" style="background-color: rgb(228, 241, 33); border-radius: 20%; color: cornsilk;">
-        {{ i.task }}
+        <a href="{% url 'aproveTask' i.id %}">{{ i.task }}</a>
     </div>
     {% endfor %}
+    {% endif %}
     <div><h2>Approved Task</h2></div>
     {% for i in approve %}
     <div class="col-4" style="background-color: rgb(228, 241, 33); border-radius: 20%; color: cornsilk;">
-        {{ i.task }}
+        <a href="{% url 'taskdetail' i.id %}">{{ i.task }}</a>
     </div>
     {% endfor %}
   </div>
