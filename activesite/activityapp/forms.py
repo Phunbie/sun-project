@@ -26,7 +26,7 @@ class ComleteTaskForm(forms.ModelForm):
 class ProfileForm(forms.ModelForm):
     class Meta:
         model = Profile
-        fields = ['role', 'region', 'area', 'country']
+        fields = ['role', 'region', 'area', 'country','team']
         widgets = {
             'role': forms.RadioSelect(choices=[('Manager', 'Manager'), ('Staff', 'Staff')]),
         }
