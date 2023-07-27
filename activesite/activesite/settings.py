@@ -29,7 +29,7 @@ goog = os.environ.get('secgoo')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*','127.0.0.1:8000']
+ALLOWED_HOSTS = ['*','127.0.0.1:8000','localhost']
 
 
 # Application definition
@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
     'activityapp',
     'crispy_bootstrap4',
 
@@ -53,6 +54,8 @@ INSTALLED_APPS = [
 
     'crispy_forms',
 ]
+
+SITE_ID = 3
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -120,6 +123,29 @@ AUTHENTICATION_BACKENDS =[
 ]
 
 SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'SCOPE': [
+            'profile',
+            'email',
+        ],
+        'AUTH_PARAMS': {
+            'access_type': 'online',
+        }
+    },   
+     'facebook': {
+        'SCOPE': [
+            'profile',
+            'email',
+        ],
+        'AUTH_PARAMS': {
+            'access_type': 'online',
+        }
+    },
+}
+"""
+SOCIALACCOUNT_PROVIDERS = {
+    
+
     'facebook': {
         'APP': {
             'client_id': '1476589456471686',
@@ -134,8 +160,9 @@ SOCIALACCOUNT_PROVIDERS = {
             'key': ''
         }
     },
+    
 }
-
+"""
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 

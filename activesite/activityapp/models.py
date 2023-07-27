@@ -48,14 +48,14 @@ class Visit(models.Model):
     
 
     
-
+"""
 class UserTeam(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     team = models.ForeignKey(Team, on_delete=models.CASCADE)
     month = models.DateField()
     goal = models.IntegerField()
     achievement = models.IntegerField()
-   
+ """  
 
 class Audit(models.Model):
     team = models.ForeignKey(Team, on_delete=models.CASCADE)
