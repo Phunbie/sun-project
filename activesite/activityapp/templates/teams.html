@@ -1,11 +1,14 @@
 {% extends 'account/base.html' %}
 
 {% block content %}
+<h1>Teams</h1>
 <div class="row ">
 {% for i in teams %}
     <div class="col-4">
         {{ i.name }} {{ i.id }}
     </div>
+    <a href="{% url 'monthtasks' i.id %}" role="button" class="btn btn-warning">Completed Task</a>
+    <a href="{% url 'teamprofiles' i.id %}" role="button" class="btn btn-warning">Team Members</a>
 {% endfor %}
 </div>
 {% endblock %}

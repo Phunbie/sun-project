@@ -2,6 +2,9 @@
 {% block content %}
 
 <h1 class="text-center">Dashboard</h1>
+{% if role == "" %}
+<a class="btn btn-info" href="{% url 'createprofile' %}">Create Profile</a>
+{% endif %} 
 <div class="container text-center" style="height:700px;">
     <div class="row "><h2>Available Task</h2></div> <!--align-items-center-->
     {% if role == "Manager" %}

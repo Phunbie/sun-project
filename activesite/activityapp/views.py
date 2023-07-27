@@ -174,7 +174,10 @@ def team_profiles(request, id):
 @login_required
 def monthly_team_tasks(request,teamid):
     user = request.user
+    Months = ['January','February','March','April','May','June','July',
+    'August','September','October','November','December']
     month = datetime.date.today().month
+    month_instring = Months[month-1]
     try:
         Profile.objects.get(user=user)
     except Profile.DoesNotExist:
@@ -186,12 +189,12 @@ def monthly_team_tasks(request,teamid):
     updated_at__month=month,
     team_id=teamid
     )
-    visits = Visit.objects.filter(updated_at__month=month,mission=tasks)
+    #visits = Visit.objects.filter(updated_at__month=month,mission=tasks)
     context = {
     'team': team,
     'tasks': tasks,
-    'month': month,
-    'visits':visits
+    'month': month_instring,
+    #'visits': visits
     }
     return render(request, 'monthly_team_tasks.html', context)
 
