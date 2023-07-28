@@ -2,10 +2,13 @@
 
 {% block content %}
 <h1>Task completed by {{ team.name }} in the month of {{ month }}</h1>
+<small>Completed task: {{ task_no }}</small>
 <h2>Tasks</h2>
 {% for i in tasks %}
+<div>
   <p>Task: {{ i.task }}</p>
-  <p>description: {{ i.description }}</p>
+  <p>Description: {{ i.description }}</p>
+</div>
 {% endfor %}
-
+<a class="btn btn-primary" href="{% url 'createaudit' team.id %}" role="button">Audit</a>
 {% endblock %}

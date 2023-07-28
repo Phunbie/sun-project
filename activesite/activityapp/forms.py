@@ -1,6 +1,6 @@
 from django import forms
 #from django.forms import ModelForm, TextInput, EmailInput
-from .models import Task, Profile, Team, Visit, User
+from .models import Task, Profile, Team, Visit, Audit, User
 from django.forms import DateField
 
 """class TaskForm(forms.ModelForm):
@@ -55,3 +55,10 @@ class ImageUploadForm(forms.ModelForm):
     class Meta:
         model = Visit
         fields = ['date', 'mission', 'goal', 'achievement', 'notes', 'picture']
+
+
+class AuditForm(forms.ModelForm):
+    date = DateField(widget=forms.DateInput(attrs={'type': 'date'}))
+    class Meta:
+        model = Audit
+        exclude = ['team']

@@ -1,10 +1,10 @@
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from .models import Task, Profile, Team, Visit
+from .models import Task, Profile, Team, Visit, Audit
 from django.shortcuts import redirect
 #from django.core.exceptions import ObjectDoesNotExist
 from django.forms import modelform_factory
-from .forms import TaskForm, ProfileForm, ImageUploadForm, ComleteTaskForm 
+from .forms import TaskForm, ProfileForm, ImageUploadForm, ComleteTaskForm, AuditForm
 import datetime
 
 """def redirectToCreate():
@@ -22,11 +22,12 @@ def dashboard(request):
     try:
         profile=Profile.objects.get(user=request.user)
         role = profile.role
-    #except ObjectDoesNotExist:
+    
     except Profile.DoesNotExist:
         role = "" 
     user_id = request.user.id
     task = Task.objects.filter(approve=False, completed=False, selected=False)
+    task_num = task.count()
     selected = Task.objects.filter(approve=False, completed=False, selected=True, user_id=user_id)
     #selected = Task.objects.filter(approve=False, completed=False, selected=True)
     completed = Task.objects.filter(approve=False, completed=True)
@@ -189,12 +190,13 @@ def monthly_team_tasks(request,teamid):
     updated_at__month=month,
     team_id=teamid
     )
+    task_no = tasks.count()
     #visits = Visit.objects.filter(updated_at__month=month,mission=tasks)
     context = {
     'team': team,
     'tasks': tasks,
     'month': month_instring,
-    #'visits': visits
+    'task_no': task_no
     }
     return render(request, 'monthly_team_tasks.html', context)
 
@@ -320,3 +322,33 @@ def TaskDetail(request, id):
     visits_count = Visit.objects.filter(mission=task).count() 
     
     return render(request, 'TaskDetail.html', {'task': task,'visits_count':visits_count})
+
+
+
+
+@login_required
+def create_audit(request, team_id):
+    team = get_object_or_404(Team, id=team_id)
+    team_name = team.name
+    if request.method == 'POST':
+        form = AuditForm(request.POST)
+        if form.is_valid():
+            audit = form.save(commit=False)
+            audit.team = team
+            audit.save()
+            return redirect('dashboard')  # Redirect to a success page or the audit list page
+    else:
+        form = AuditForm(initial={'team': team})
+    
+    return render(request, 'create_audit.html', {'form': form,'team_name':team_name})
+
+@login_required
+def audit_list(request):
+    user = request.user
+    try:
+        Profile.objects.get(user=user)
+    except Profile.DoesNotExist:
+        message="you need to create a profile first"
+        return redirect('createprofile') 
+    audits = Audit.objects.all()
+    return render(request, 'audit_list.html', {'audits':audits})

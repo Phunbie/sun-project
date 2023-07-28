@@ -1,0 +1,14 @@
+{% extends 'account/base.html' %}
+
+{% block content %}
+
+<h1>Audit {{ team_name }}</h1>
+
+<form method="post">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <input type="hidden" name="team" value="{{ form.initial.team.id }}">
+  <button type="submit">Save</button>
+</form>
+
+{% endblock %}
